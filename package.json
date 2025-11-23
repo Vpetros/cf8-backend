@@ -8,6 +8,7 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
+    "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn src/server.ts"
   },
   "dependencies": {

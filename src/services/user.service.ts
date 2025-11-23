@@ -7,7 +7,11 @@ import { Types } from 'mongoose';
 const SALT_ROUNDS = 10;
 
 export const findAllUsers = async () => {
-  return User.find().lean()
+  return User.find().populate('roles').lean()
+}
+
+export const findUserById = async(id: string) => {
+  return User.findById(id).populate('roles').lean();
 }
 
 export const createUser = async(payload: Partial<IUser>) =>{
@@ -16,13 +20,13 @@ export const createUser = async(payload: Partial<IUser>) =>{
     payload.password = hash;
   }
   // let roleIds: Types.ObjectId[] = [];
-  // let reader = await Role.findOne({role: "READER"});
-  //   if (!reader) {
-  //   reader = await Role.create({role: "Reader", description: "Role Reader", active: true});
-  // }
+  let reader = await Role.findOne({role: "READER"});
+    if (!reader) {
+    reader = await Role.create({role: "Reader", description: "Role Reader", active: true});
+  }
   
-  // let roleIds: Types.ObjectId = [reader._id];
-  const user = new User(payload);
+  let roleIds = [reader._id];
+  const user = new User({...payload, roles: roleIds});
   return user.save();
 
 }
