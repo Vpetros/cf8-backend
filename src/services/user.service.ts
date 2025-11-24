@@ -31,5 +31,17 @@ export const createUser = async(payload: Partial<IUser>) =>{
 
 }
 
+export const updateUser = async(id: string, payload: Partial<IUser>) => {
+  if (payload.password) {
+    const hash = await bcrypt.hash(payload.password, SALT_ROUNDS);
+    payload.password = hash;
+  }
+  return User.findByIdAndUpdate(id, payload, {new: true}).populate('roles')
+}
+
+export const deleteUser = async(id: string) => {
+  return User.findByIdAndDelete(id);
+}
+
 
 
