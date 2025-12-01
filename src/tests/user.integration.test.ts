@@ -49,5 +49,13 @@ describe('User API tests', () => {
     
     expect(res.status).toBe(201);
     expect(res.body.username).toBe('newuser');
+
+      test('POST /users -> creates new user with wrong password', async()=>{
+    const res = await server.request.post('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({username: "newuser", password:"12"});
+    
+    expect(res.status).toBe(400);
   });
+});
 });
